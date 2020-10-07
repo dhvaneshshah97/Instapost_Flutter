@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import 'package:flutter/material.dart';
 import '../models/http_exception.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -136,6 +137,11 @@ class _AuthCardState extends State<AuthCard> {
         // Log user in
         await Provider.of<Auth>(context, listen: false)
             .login(_authData['email'], _authData['password']);
+        print("done");
+        // storing user email for later authentication
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('email', _authData['email']);
+        Navigator.pushNamed(context, '/home');
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
@@ -156,7 +162,9 @@ class _AuthCardState extends State<AuthCard> {
       }
       _showErrorDialog(errorMessage);
     } catch (error) {
-      const errorMessage = 'Try again.!';
+      const errorMessage =
+          'Could not authenticate you this time, try again later..!';
+      _showErrorDialog(errorMessage);
     }
     setState(() {
       _isLoading = false;
