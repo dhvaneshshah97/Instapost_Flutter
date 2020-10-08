@@ -1,3 +1,4 @@
+import '../widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatefulWidget {
@@ -19,6 +20,7 @@ class _HomescreenState extends State<Homescreen> {
           ),
         ),
       ),
+      drawer: AppDrawer(),
     );
   }
 }

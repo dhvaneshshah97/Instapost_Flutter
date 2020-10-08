@@ -57,10 +57,10 @@ class _MyAppState extends State<MyApp> {
         },
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.deepOrange,
+          primarySwatch: Colors.indigo,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: email == 'notAuthenticated' ? AuthScreen() : Homescreen(),
+        home: email != 'notAuthenticated' ? Homescreen() : AuthScreen(),
       ),
     );
   }

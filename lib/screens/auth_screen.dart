@@ -137,11 +137,10 @@ class _AuthCardState extends State<AuthCard> {
         // Log user in
         await Provider.of<Auth>(context, listen: false)
             .login(_authData['email'], _authData['password']);
-        print("done");
         // storing user email for later authentication
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _authData['email']);
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, '/home');
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
