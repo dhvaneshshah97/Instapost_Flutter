@@ -1,4 +1,6 @@
+import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/home_screen.dart';
+import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './screens/auth_screen.dart';
@@ -48,12 +50,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (ctx) => Auth(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => UsersByNicknameProvider(),
+        ),
+      ],
       child: MaterialApp(
         routes: {
-          '/home': (ctx) => Homescreen(),
+          Homescreen.routeName: (ctx) => Homescreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
+          UsersByNickname.routeName: (ctx) => UsersByNickname(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(

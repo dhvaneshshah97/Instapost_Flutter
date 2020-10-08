@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:InstaPost/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import 'package:flutter/material.dart';
@@ -140,7 +141,7 @@ class _AuthCardState extends State<AuthCard> {
         // storing user email for later authentication
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _authData['email']);
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushReplacementNamed(context, Homescreen.routeName);
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(

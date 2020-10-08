@@ -1,4 +1,5 @@
 import 'package:InstaPost/screens/auth_screen.dart';
+import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,8 @@ class _AppDrawerState extends State<AppDrawer> {
             leading: Icon(Icons.supervised_user_circle),
             title: Text('Find Users by Nicknames'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context)
+                  .pushReplacementNamed(UsersByNickname.routeName);
             },
           ),
           Divider(),

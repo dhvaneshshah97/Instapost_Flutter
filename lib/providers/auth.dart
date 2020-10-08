@@ -6,10 +6,6 @@ import 'dart:convert';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
-  // String _token;
-  // DateTime _expiryDate;
-  // String _userId;
-
   Future<void> signup(String firstname, String lastname, String nickname,
       String email, String password) async {
     const url = "https://bismarck.sdsu.edu/api/instapost-upload/newuser";
