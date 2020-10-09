@@ -1,3 +1,4 @@
+import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,10 @@ class _UsersByNicknameState extends State<UsersByNickname> {
     return nicknames;
   }
 
+  Future<void> _getPosts(nickname) async {
+    await Provider.of<FetchPosts>(context, listen: false).getPosts(nickname);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +56,7 @@ class _UsersByNicknameState extends State<UsersByNickname> {
                     title: Text(_nicknames[index]),
                     trailing: FlatButton(
                       child: Text("See their Posts"),
-                      onPressed: () {},
+                      onPressed: () => _getPosts(_nicknames[index]),
                     ),
                   ),
                 ),

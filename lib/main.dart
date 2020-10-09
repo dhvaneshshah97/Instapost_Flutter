@@ -1,3 +1,4 @@
+import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
@@ -57,6 +58,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (ctx) => UsersByNicknameProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => FetchPosts(),
         ),
       ],
       child: MaterialApp(
