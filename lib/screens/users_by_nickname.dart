@@ -1,5 +1,7 @@
 import 'package:InstaPost/providers/fetch_post.dart';
+import 'package:InstaPost/screens/userpost_by_nickname.dart';
 import 'package:InstaPost/widgets/app_drawer.dart';
+import 'package:InstaPost/widgets/show_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/users_by_nickname.dart';
@@ -30,8 +32,9 @@ class _UsersByNicknameState extends State<UsersByNickname> {
     return nicknames;
   }
 
-  Future<void> _getPosts(nickname) async {
-    await Provider.of<FetchPosts>(context, listen: false).getPosts(nickname);
+  _getPosts(nickname) async {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => UserPostByNickname(nickname)));
   }
 
   @override
