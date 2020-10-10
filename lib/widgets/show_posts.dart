@@ -76,27 +76,68 @@ class _ShowPostsState extends State<ShowPosts> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return snapshot.data.length > 0
-              ? ListView.builder(
-                  itemCount: _posts.length,
-                  itemBuilder: (context, index) => Container(
-                    height: 150,
-                    child: Card(
+              ? Container(
+                  child: ListView.builder(
+                    itemCount: _posts.length,
+                    itemBuilder: (context, index) => Container(
+                      padding: EdgeInsets.fromLTRB(5.0, 15.0, 5.0, 0.0),
+                      child: Card(
+                          child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15.0),
                         child: Column(
-                      children: [
-                        ListTile(
-                          leading: Text('${index + 1}'),
-                          title: Text(_posts[index]['post']['text']),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ListTile(
+                              leading: CircleAvatar(
+                                child: Text((index + 1).toString()),
+                              ),
+                              title: Text(
+                                _posts[index]['post']['text'],
+                                style: TextStyle(
+                                  fontSize: 23.0,
+                                ),
+                              ),
+                              subtitle:
+                                  Text(_posts[index]['post']['hashtags'][0]),
+                            ),
+                            Container(
+                                padding: EdgeInsets.only(top: 10, bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Total ratings: ${_posts[index]['post']['ratings-count']}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                    Text(() {
+                                      if (_posts[index]['post']
+                                              ['ratings-average'] ==
+                                          -1) {
+                                        _posts[index]['post']
+                                            ['ratings-average'] = 0;
+                                        return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                      } else {
+                                        return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                      }
+                                    }()),
+                                  ],
+                                )),
+                            // Container(
+                            //     child:
+                            // ),
+                            Container(
+                              // width: 140,
+                              child: TextField(
+                                decoration:
+                                    InputDecoration(labelText: 'Your Comments'),
+                              ),
+                            )
+                          ],
                         ),
-                        Container(
-                          // width: 140,
-                          padding: EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                            decoration:
-                                InputDecoration(labelText: 'Your Comments'),
-                          ),
-                        )
-                      ],
-                    )),
+                      )),
+                    ),
                   ),
                 )
               : Center(
