@@ -11,7 +11,7 @@ class UserPostByNickname extends StatelessWidget {
       appBar: AppBar(
         title: Text('${this.nickname}\'s All Posts'),
       ),
-      body: ShowPosts(this.nickname),
+      body: ShowPosts(this.nickname, 'nickname'),
     );
   }
 }

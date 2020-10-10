@@ -1,12 +1,13 @@
 import 'package:InstaPost/providers/fetch_post.dart';
+import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
 
 class ShowPosts extends StatefulWidget {
-  final nickname;
-
-  ShowPosts(this.nickname);
+  final queryString;
+  final whichScreen;
+  ShowPosts(this.queryString, this.whichScreen);
 
   @override
   _ShowPostsState createState() => _ShowPostsState();
@@ -43,13 +44,24 @@ class _ShowPostsState extends State<ShowPosts> {
   Future<void> _getPosts() async {
     return this._memoizer.runOnce(() async {
       try {
-        List posts = await Provider.of<FetchPosts>(context, listen: false)
-            .getPosts(this.widget.nickname);
-        setState(() {
-          _posts = posts;
-        });
-        print(_posts);
-        return _posts;
+        if (this.widget.whichScreen == 'nickname') {
+          List posts = await Provider.of<FetchPosts>(context, listen: false)
+              .getPosts(this.widget.queryString);
+          setState(() {
+            _posts = posts;
+          });
+          print(_posts);
+          return _posts;
+        } else if (this.widget.whichScreen == 'hashtag') {
+          List posts =
+              await Provider.of<GetAllHashtagsProvider>(context, listen: false)
+                  .getPosts(this.widget.queryString);
+          setState(() {
+            _posts = posts;
+          });
+          // print(_posts);
+          return _posts;
+        }
       } catch (error) {
         const errorMessage = 'Something went wrong, try again later..!';
         _showErrorDialog(errorMessage);

@@ -1,5 +1,6 @@
 import 'package:InstaPost/screens/auth_screen.dart';
 import 'package:InstaPost/screens/home_screen.dart';
+import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,7 +48,8 @@ class _AppDrawerState extends State<AppDrawer> {
             leading: FaIcon(FontAwesomeIcons.hashtag),
             title: Text('All Hashtags'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context)
+                  .pushReplacementNamed(ListOfHashtags.routeName);
             },
           ),
           Divider(),

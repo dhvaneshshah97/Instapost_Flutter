@@ -1,6 +1,8 @@
 import 'package:InstaPost/providers/fetch_post.dart';
+import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/home_screen.dart';
+import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,12 +64,16 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => FetchPosts(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => GetAllHashtagsProvider(),
+        ),
       ],
       child: MaterialApp(
         routes: {
           Homescreen.routeName: (ctx) => Homescreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
           UsersByNickname.routeName: (ctx) => UsersByNickname(),
+          ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
