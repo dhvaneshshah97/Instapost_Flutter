@@ -101,6 +101,7 @@ class _ShowPostsState extends State<ShowPosts> {
                               subtitle:
                                   Text(_posts[index]['post']['hashtags'][0]),
                             ),
+                            Divider(),
                             Container(
                                 padding: EdgeInsets.only(top: 10, bottom: 10),
                                 child: Row(
@@ -124,9 +125,22 @@ class _ShowPostsState extends State<ShowPosts> {
                                     }()),
                                   ],
                                 )),
-                            // Container(
-                            //     child:
-                            // ),
+                            Divider(),
+                            Text(
+                              'Comments',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _posts[index]['post']['comments']
+                                    .map<Widget>((comment) => Container(
+                                          child: Text('- $comment'),
+                                        ))
+                                    .toList(),
+                              ),
+                            ),
+                            Divider(),
                             Container(
                               // width: 140,
                               child: TextField(
