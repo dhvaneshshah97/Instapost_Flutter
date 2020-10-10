@@ -9,7 +9,7 @@ import 'dart:io';
 import './providers/auth.dart';
 import 'package:provider/provider.dart';
 
-// Below code is added to remove a certificate error named -> "unable to get local issuer certificate"
+// Below Class is added to remove a certificate error -> "unable to get local issuer certificate"
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext context) {

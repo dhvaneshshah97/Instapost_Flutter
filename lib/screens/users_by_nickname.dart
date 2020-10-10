@@ -1,7 +1,5 @@
-import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/screens/userpost_by_nickname.dart';
 import 'package:InstaPost/widgets/app_drawer.dart';
-import 'package:InstaPost/widgets/show_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/users_by_nickname.dart';
@@ -22,6 +20,7 @@ class _UsersByNicknameState extends State<UsersByNickname> {
     _getUsersByNickname();
   }
 
+  // This method will fetch all nicknames from provider and store in _nicknames list
   Future<void> _getUsersByNickname() async {
     List nicknames =
         await Provider.of<UsersByNicknameProvider>(context, listen: false)
@@ -32,7 +31,7 @@ class _UsersByNicknameState extends State<UsersByNickname> {
     return nicknames;
   }
 
-  _getPosts(nickname) async {
+  _goToUserPostByNicknameScreen(nickname) async {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => UserPostByNickname(nickname)));
   }
@@ -59,7 +58,8 @@ class _UsersByNicknameState extends State<UsersByNickname> {
                     title: Text(_nicknames[index]),
                     trailing: FlatButton(
                       child: Text("See their Posts"),
-                      onPressed: () => _getPosts(_nicknames[index]),
+                      onPressed: () =>
+                          _goToUserPostByNicknameScreen(_nicknames[index]),
                     ),
                   ),
                 ),

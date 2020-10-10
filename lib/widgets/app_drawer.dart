@@ -27,7 +27,7 @@ class _AppDrawerState extends State<AppDrawer> {
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            leading: Icon(Icons.home),
+            leading: FaIcon(FontAwesomeIcons.home),
             title: Text('Home'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(Homescreen.routeName);
@@ -35,7 +35,7 @@ class _AppDrawerState extends State<AppDrawer> {
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.supervised_user_circle),
+            leading: FaIcon(FontAwesomeIcons.users),
             title: Text('Find Users by Nicknames'),
             onTap: () {
               Navigator.of(context)

@@ -23,15 +23,37 @@ class _ShowPostsState extends State<ShowPosts> {
     // print(_posts);
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text('Oops!'),
+              content: Text(message),
+              actions: [
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(ctx).pop();
+                      Navigator.pop(context);
+                    },
+                    child: Text('Okay'))
+              ],
+            ));
+  }
+
   Future<void> _getPosts() async {
     return this._memoizer.runOnce(() async {
-      List posts = await Provider.of<FetchPosts>(context, listen: false)
-          .getPosts(this.widget.nickname);
-      setState(() {
-        _posts = posts;
-      });
-      print(_posts);
-      return _posts;
+      try {
+        List posts = await Provider.of<FetchPosts>(context, listen: false)
+            .getPosts(this.widget.nickname);
+        setState(() {
+          _posts = posts;
+        });
+        print(_posts);
+        return _posts;
+      } catch (error) {
+        const errorMessage = 'Something went wrong, try again later..!';
+        _showErrorDialog(errorMessage);
+      }
     });
   }
 
@@ -45,13 +67,24 @@ class _ShowPostsState extends State<ShowPosts> {
               ? ListView.builder(
                   itemCount: _posts.length,
                   itemBuilder: (context, index) => Container(
-                    height: 100,
+                    height: 150,
                     child: Card(
-                      child: ListTile(
-                        leading: Text('${index + 1}'),
-                        title: Text(_posts[index]['post']['text']),
-                      ),
-                    ),
+                        child: Column(
+                      children: [
+                        ListTile(
+                          leading: Text('${index + 1}'),
+                          title: Text(_posts[index]['post']['text']),
+                        ),
+                        Container(
+                          // width: 140,
+                          padding: EdgeInsets.only(left: 15, right: 15),
+                          child: TextField(
+                            decoration:
+                                InputDecoration(labelText: 'Your Comments'),
+                          ),
+                        )
+                      ],
+                    )),
                   ),
                 )
               : Center(
