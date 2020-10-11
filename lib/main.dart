@@ -1,3 +1,4 @@
+import 'package:InstaPost/providers/add_comments.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
@@ -66,6 +67,9 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (ctx) => GetAllHashtagsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => AddComments(),
         ),
       ],
       child: MaterialApp(

@@ -141,6 +141,7 @@ class _AuthCardState extends State<AuthCard> {
         // storing user email for later authentication
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _authData['email']);
+        prefs.setString('password', _authData['password']);
         Navigator.pushReplacementNamed(context, Homescreen.routeName);
       } else {
         // Sign user up

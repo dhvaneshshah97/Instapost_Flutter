@@ -1,3 +1,4 @@
+import 'package:InstaPost/providers/add_comments.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class ShowPosts extends StatefulWidget {
 
 class _ShowPostsState extends State<ShowPosts> {
   List _posts = [];
+  // String _comment = '';
   final AsyncMemoizer _memoizer = AsyncMemoizer();
+  Map<int, String> _inputs = {};
 
   @override
   void initState() {
@@ -66,6 +69,17 @@ class _ShowPostsState extends State<ShowPosts> {
         const errorMessage = 'Something went wrong, try again later..!';
         _showErrorDialog(errorMessage);
       }
+    });
+  }
+
+  Future<void> _addsComment(String comment, int postid) async {
+    await Provider.of<AddComments>(context, listen: false)
+        .addCommets(comment, postid);
+    List posts =
+        await Provider.of<GetAllHashtagsProvider>(context, listen: false)
+            .getPosts(this.widget.queryString);
+    setState(() {
+      _posts = posts;
     });
   }
 
@@ -144,9 +158,28 @@ class _ShowPostsState extends State<ShowPosts> {
                             Container(
                               // width: 140,
                               child: TextField(
+                                controller: TextEditingController(),
                                 decoration:
                                     InputDecoration(labelText: 'Your Comments'),
+                                onChanged: (value) {
+                                  _inputs[_posts[index]['post']['id']] =
+                                      value.toString();
+                                },
                               ),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            RaisedButton(
+                              onPressed: () => _addsComment(
+                                  _inputs[_posts[index]['post']['id']],
+                                  _posts[index]['post']['id']),
+                              // _addsComment(_posts[index]['post']['id']),
+                              child: Text(
+                                'Done',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              color: Theme.of(context).primaryColor,
                             )
                           ],
                         ),
