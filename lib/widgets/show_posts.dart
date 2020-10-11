@@ -4,6 +4,8 @@ import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart' as FRB;
+import 'package:rating_bar/rating_bar.dart' as RB;
 
 class ShowPosts extends StatefulWidget {
   final queryString;
@@ -121,28 +123,82 @@ class _ShowPostsState extends State<ShowPosts> {
                             ),
                             Divider(),
                             Container(
-                                padding: EdgeInsets.only(top: 10, bottom: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Total ratings: ${_posts[index]['post']['ratings-count']}',
-                                      style: TextStyle(fontSize: 15),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Total ratings: ${_posts[index]['post']['ratings-count']}',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                      ],
                                     ),
-                                    Text(() {
-                                      if (_posts[index]['post']
-                                              ['ratings-average'] ==
-                                          -1) {
-                                        _posts[index]['post']
-                                            ['ratings-average'] = 0;
-                                        return 'Average rating: ${_posts[index]['post']['ratings-average']}';
-                                      } else {
-                                        return 'Average rating: ${_posts[index]['post']['ratings-average']}';
-                                      }
-                                    }()),
-                                  ],
-                                )),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Your Ratings',
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                        Text(
+                                          () {
+                                            if (_posts[index]['post']
+                                                    ['ratings-average'] ==
+                                                -1) {
+                                              _posts[index]['post']
+                                                  ['ratings-average'] = 0;
+                                              return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                            } else {
+                                              return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                            }
+                                          }(),
+                                          style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RB.RatingBar(
+                                          size: 25,
+                                          emptyIcon: Icons.star_border,
+                                          maxRating: 5,
+                                          filledIcon: Icons.star,
+                                          isHalfAllowed: false,
+                                          filledColor: Colors.amber,
+                                          onRatingChanged: (rating) =>
+                                              print(rating),
+                                        ),
+                                        RB.RatingBar.readOnly(
+                                          size: 25,
+                                          initialRating: double.parse(
+                                              _posts[index]['post']
+                                                      ['ratings-average']
+                                                  .toString()),
+                                          isHalfAllowed: true,
+                                          halfFilledIcon: Icons.star_half,
+                                          filledIcon: Icons.star,
+                                          emptyIcon: Icons.star_border,
+                                        ),
+                                      ],
+                                    ),
+                                  ]),
+                            ),
                             Divider(),
                             Text(
                               'Comments',
