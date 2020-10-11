@@ -19,6 +19,7 @@ class _ShowPostsState extends State<ShowPosts> {
   // String _comment = '';
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   Map<int, String> _inputs = {};
+  // bool _validate = false;
 
   @override
   void initState() {
@@ -73,14 +74,17 @@ class _ShowPostsState extends State<ShowPosts> {
   }
 
   Future<void> _addsComment(String comment, int postid) async {
-    await Provider.of<AddComments>(context, listen: false)
-        .addCommets(comment, postid);
-    List posts =
-        await Provider.of<GetAllHashtagsProvider>(context, listen: false)
-            .getPosts(this.widget.queryString);
-    setState(() {
-      _posts = posts;
-    });
+    if (_inputs.isNotEmpty) {
+      await Provider.of<AddComments>(context, listen: false)
+          .addCommets(comment, postid);
+      List posts =
+          await Provider.of<GetAllHashtagsProvider>(context, listen: false)
+              .getPosts(this.widget.queryString);
+      setState(() {
+        _posts = posts;
+      });
+      _inputs.clear();
+    }
   }
 
   @override
@@ -159,8 +163,11 @@ class _ShowPostsState extends State<ShowPosts> {
                               // width: 140,
                               child: TextField(
                                 controller: TextEditingController(),
-                                decoration:
-                                    InputDecoration(labelText: 'Your Comments'),
+                                decoration: InputDecoration(
+                                  labelText: 'Write a comment...',
+                                  // errorText: _validate
+                                  //     ? 'Please enter your comment first'
+                                ),
                                 onChanged: (value) {
                                   _inputs[_posts[index]['post']['id']] =
                                       value.toString();
