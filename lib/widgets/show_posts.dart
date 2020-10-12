@@ -1,4 +1,5 @@
 import 'package:InstaPost/providers/add_comments.dart';
+import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _ShowPostsState extends State<ShowPosts> {
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   Map<int, String> _inputs = {};
   // bool _validate = false;
+  double _rating = 0;
 
   @override
   void initState() {
@@ -79,13 +81,41 @@ class _ShowPostsState extends State<ShowPosts> {
     if (_inputs.isNotEmpty) {
       await Provider.of<AddComments>(context, listen: false)
           .addCommets(comment, postid);
+      if (this.widget.whichScreen == 'nickname') {
+        List posts = await Provider.of<FetchPosts>(context, listen: false)
+            .getPosts(this.widget.queryString);
+        setState(() {
+          _posts = posts;
+        });
+      } else if (this.widget.whichScreen == 'hashtag') {
+        List posts =
+            await Provider.of<GetAllHashtagsProvider>(context, listen: false)
+                .getPosts(this.widget.queryString);
+        setState(() {
+          _posts = posts;
+        });
+      }
+      _inputs.clear();
+    }
+  }
+
+  Future<void> _addsRating(int postid) async {
+    int _ratingAPI = _rating.toInt();
+    await Provider.of<AddRatings>(context, listen: false)
+        .addRatings(_ratingAPI, postid);
+    if (this.widget.whichScreen == 'nickname') {
+      List posts = await Provider.of<FetchPosts>(context, listen: false)
+          .getPosts(this.widget.queryString);
+      setState(() {
+        _posts = posts;
+      });
+    } else if (this.widget.whichScreen == 'hashtag') {
       List posts =
           await Provider.of<GetAllHashtagsProvider>(context, listen: false)
               .getPosts(this.widget.queryString);
       setState(() {
         _posts = posts;
       });
-      _inputs.clear();
     }
   }
 
@@ -149,7 +179,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                         Text(
                                           'Your Ratings',
                                           style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.w300),
                                         ),
                                         Text(
@@ -165,27 +195,43 @@ class _ShowPostsState extends State<ShowPosts> {
                                             }
                                           }(),
                                           style: TextStyle(
-                                              fontSize: 17,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.w300),
                                         ),
                                       ],
                                     ),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
                                       children: [
                                         RB.RatingBar(
-                                          size: 25,
+                                          size: 23,
+                                          initialRating: _rating,
                                           emptyIcon: Icons.star_border,
                                           maxRating: 5,
                                           filledIcon: Icons.star,
                                           isHalfAllowed: false,
                                           filledColor: Colors.amber,
                                           onRatingChanged: (rating) =>
-                                              print(rating),
+                                              _rating = rating,
                                         ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => _addsRating(
+                                              _posts[index]['post']['id']),
+                                          child: CircleAvatar(
+                                            maxRadius: 13.0,
+                                            child: Icon(
+                                              Icons.check,
+                                              size: 17,
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(),
                                         RB.RatingBar.readOnly(
-                                          size: 25,
+                                          size: 23,
                                           initialRating: double.parse(
                                               _posts[index]['post']
                                                       ['ratings-average']
