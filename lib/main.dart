@@ -3,6 +3,7 @@ import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
+import './providers/image_provider.dart';
 import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
@@ -75,6 +76,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (ctx) => AddRatings(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => APIImageProvider(),
+        )
       ],
       child: MaterialApp(
         routes: {

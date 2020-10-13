@@ -2,6 +2,7 @@ import 'package:InstaPost/providers/add_comments.dart';
 import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
+import 'package:InstaPost/providers/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
@@ -133,162 +134,224 @@ class _ShowPostsState extends State<ShowPosts> {
                       padding: EdgeInsets.fromLTRB(5.0, 15.0, 5.0, 0.0),
                       child: Card(
                           child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 15.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ListTile(
-                              leading: CircleAvatar(
-                                child: Text((index + 1).toString()),
-                              ),
-                              title: Text(
-                                _posts[index]['post']['text'],
-                                style: TextStyle(
-                                  fontSize: 23.0,
-                                ),
-                              ),
-                              subtitle:
-                                  Text(_posts[index]['post']['hashtags'][0]),
-                            ),
-                            Divider(),
-                            Container(
-                              padding: EdgeInsets.only(top: 10, bottom: 10),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Total ratings: ${_posts[index]['post']['ratings-count']}',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Your Ratings',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                        Text(
-                                          () {
-                                            if (_posts[index]['post']
-                                                    ['ratings-average'] ==
-                                                -1) {
-                                              _posts[index]['post']
-                                                  ['ratings-average'] = 0;
-                                              return 'Average rating: ${_posts[index]['post']['ratings-average']}';
-                                            } else {
-                                              return 'Average rating: ${_posts[index]['post']['ratings-average']}';
-                                            }
-                                          }(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        RB.RatingBar(
-                                          size: 23,
-                                          initialRating: _rating,
-                                          emptyIcon: Icons.star_border,
-                                          maxRating: 5,
-                                          filledIcon: Icons.star,
-                                          isHalfAllowed: false,
-                                          filledColor: Colors.amber,
-                                          onRatingChanged: (rating) =>
-                                              _rating = rating,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        GestureDetector(
-                                          onTap: () => _addsRating(
-                                              _posts[index]['post']['id']),
-                                          child: CircleAvatar(
-                                            maxRadius: 13.0,
-                                            child: Icon(
-                                              Icons.check,
-                                              size: 17,
+                            _posts[index]['post']['image'] != -1
+                                ? Container(
+                                    child: FutureBuilder(
+                                      future: Provider.of<APIImageProvider>(
+                                              context,
+                                              listen: false)
+                                          .getAnImage(
+                                              _posts[index]['post']['image']),
+                                      builder: (BuildContext context,
+                                          AsyncSnapshot snapshot) {
+                                        if (snapshot.hasData) {
+                                          // print('hoya');
+                                          // print(snapshot.data);
+                                          return Card(
+                                            child: Image.memory(
+                                              snapshot.data,
+                                              fit: BoxFit.cover,
+                                              height: 300,
+                                              width: double.infinity,
                                             ),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        RB.RatingBar.readOnly(
-                                          size: 23,
-                                          initialRating: double.parse(
-                                              _posts[index]['post']
-                                                      ['ratings-average']
-                                                  .toString()),
-                                          isHalfAllowed: true,
-                                          halfFilledIcon: Icons.star_half,
-                                          filledIcon: Icons.star,
-                                          emptyIcon: Icons.star_border,
-                                        ),
-                                      ],
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Text(
+                                              'Error: ${snapshot.error}');
+                                        } else {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        }
+                                      },
                                     ),
-                                  ]),
-                            ),
-                            Divider(),
-                            Text(
-                              'Comments',
-                              style: TextStyle(fontSize: 15),
-                            ),
+                                  )
+                                : Container(),
                             Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 10.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: _posts[index]['post']['comments']
-                                    .map<Widget>((comment) => Container(
-                                          child: Text('- $comment'),
-                                        ))
-                                    .toList(),
+                                children: [
+                                  ListTile(
+                                    contentPadding:
+                                        EdgeInsets.only(left: 0, right: 0),
+                                    leading: CircleAvatar(
+                                      child: Text((index + 1).toString()),
+                                    ),
+                                    title: Text(
+                                      _posts[index]['post']['text'],
+                                      style: TextStyle(
+                                        fontSize: 23.0,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                        _posts[index]['post']['hashtags'][0]),
+                                  ),
+                                  Divider(),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 10),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Total ratings: ${_posts[index]['post']['ratings-count']}',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 15,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Your Ratings',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              ),
+                                              Text(
+                                                () {
+                                                  if (_posts[index]['post']
+                                                          ['ratings-average'] ==
+                                                      -1) {
+                                                    _posts[index]['post']
+                                                        ['ratings-average'] = 0;
+                                                    return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                                  } else {
+                                                    return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                                  }
+                                                }(),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w300),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              RB.RatingBar(
+                                                size: 23,
+                                                initialRating: _rating,
+                                                emptyIcon: Icons.star_border,
+                                                maxRating: 5,
+                                                filledIcon: Icons.star,
+                                                isHalfAllowed: false,
+                                                filledColor: Colors.amber,
+                                                onRatingChanged: (rating) =>
+                                                    _rating = rating,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              GestureDetector(
+                                                onTap: () => _addsRating(
+                                                    _posts[index]['post']
+                                                        ['id']),
+                                                child: CircleAvatar(
+                                                  maxRadius: 13.0,
+                                                  child: Icon(
+                                                    Icons.check,
+                                                    size: 17,
+                                                  ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              RB.RatingBar.readOnly(
+                                                size: 23,
+                                                initialRating: double.parse(
+                                                    _posts[index]['post']
+                                                            ['ratings-average']
+                                                        .toString()),
+                                                isHalfAllowed: true,
+                                                halfFilledIcon: Icons.star_half,
+                                                filledIcon: Icons.star,
+                                                emptyIcon: Icons.star_border,
+                                              ),
+                                            ],
+                                          ),
+                                        ]),
+                                  ),
+                                  Divider(),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.only(top: 10, bottom: 12),
+                                    child: Text(
+                                      'Comments',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w300),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: _posts[index]['post']
+                                              ['comments']
+                                          .map<Widget>((comment) => Container(
+                                                child: Text(
+                                                  '- $comment',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w300),
+                                                ),
+                                              ))
+                                          .toList(),
+                                    ),
+                                  ),
+                                  Divider(),
+                                  Container(
+                                    // width: 140,
+                                    child: TextField(
+                                      controller: TextEditingController(),
+                                      decoration: InputDecoration(
+                                        labelText: 'Write a comment...',
+                                        // errorText: _validate
+                                        //     ? 'Please enter your comment first'
+                                      ),
+                                      onChanged: (value) {
+                                        _inputs[_posts[index]['post']['id']] =
+                                            value.toString();
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 7,
+                                  ),
+                                  RaisedButton(
+                                    onPressed: () => _addsComment(
+                                        _inputs[_posts[index]['post']['id']],
+                                        _posts[index]['post']['id']),
+                                    // _addsComment(_posts[index]['post']['id']),
+                                    child: Text(
+                                      'Done',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    color: Theme.of(context).primaryColor,
+                                  )
+                                ],
                               ),
-                            ),
-                            Divider(),
-                            Container(
-                              // width: 140,
-                              child: TextField(
-                                controller: TextEditingController(),
-                                decoration: InputDecoration(
-                                  labelText: 'Write a comment...',
-                                  // errorText: _validate
-                                  //     ? 'Please enter your comment first'
-                                ),
-                                onChanged: (value) {
-                                  _inputs[_posts[index]['post']['id']] =
-                                      value.toString();
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            RaisedButton(
-                              onPressed: () => _addsComment(
-                                  _inputs[_posts[index]['post']['id']],
-                                  _posts[index]['post']['id']),
-                              // _addsComment(_posts[index]['post']['id']),
-                              child: Text(
-                                'Done',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              color: Theme.of(context).primaryColor,
                             )
                           ],
                         ),
