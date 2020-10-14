@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:InstaPost/providers/add_comments.dart';
 import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
@@ -148,19 +150,18 @@ class _ShowPostsState extends State<ShowPosts> {
                                       builder: (BuildContext context,
                                           AsyncSnapshot snapshot) {
                                         if (snapshot.hasData) {
-                                          // print('hoya');
-                                          // print(snapshot.data);
+                                          print('hoya');
+                                          print(snapshot.data);
                                           return Card(
                                             child: Image.memory(
                                               snapshot.data,
                                               fit: BoxFit.cover,
-                                              height: 300,
+                                              // height: 300,
                                               width: double.infinity,
                                             ),
                                           );
                                         } else if (snapshot.hasError) {
-                                          return Text(
-                                              'Error: ${snapshot.error}');
+                                          return SizedBox();
                                         } else {
                                           return Center(
                                             child: CircularProgressIndicator(),
