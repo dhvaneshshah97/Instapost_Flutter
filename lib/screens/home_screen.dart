@@ -1,3 +1,5 @@
+import 'package:InstaPost/screens/add_posts.dart';
+
 import '../widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +23,15 @@ class _HomescreenState extends State<Homescreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 5),
+              child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Navigator.pushNamed(context, AddPost.routeName);
+                  })),
+        ],
       ),
       drawer: AppDrawer(),
     );

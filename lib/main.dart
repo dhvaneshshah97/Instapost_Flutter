@@ -1,8 +1,10 @@
 import 'package:InstaPost/providers/add_comments.dart';
+import 'package:InstaPost/providers/add_post.dart';
 import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
+import 'package:InstaPost/screens/add_posts.dart';
 import './providers/image_provider.dart';
 import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
@@ -78,7 +80,10 @@ class _MyAppState extends State<MyApp> {
         ),
         ChangeNotifierProvider(
           create: (ctx) => APIImageProvider(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => AddPostProvider(),
+        ),
       ],
       child: MaterialApp(
         routes: {
@@ -86,6 +91,7 @@ class _MyAppState extends State<MyApp> {
           AuthScreen.routeName: (ctx) => AuthScreen(),
           UsersByNickname.routeName: (ctx) => UsersByNickname(),
           ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
+          AddPost.routeName: (ctx) => AddPost(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
