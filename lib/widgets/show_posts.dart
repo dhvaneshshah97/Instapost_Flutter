@@ -55,7 +55,8 @@ class _ShowPostsState extends State<ShowPosts> {
   Future<void> _getPosts() async {
     return this._memoizer.runOnce(() async {
       try {
-        if (this.widget.whichScreen == 'nickname') {
+        if (this.widget.whichScreen == 'nickname' ||
+            this.widget.whichScreen == 'homescreen') {
           List posts = await Provider.of<FetchPosts>(context, listen: false)
               .getPosts(this.widget.queryString);
           setState(() {
@@ -84,7 +85,8 @@ class _ShowPostsState extends State<ShowPosts> {
     if (_inputs.isNotEmpty) {
       await Provider.of<AddComments>(context, listen: false)
           .addCommets(comment, postid);
-      if (this.widget.whichScreen == 'nickname') {
+      if (this.widget.whichScreen == 'nickname' ||
+          this.widget.whichScreen == 'homescreen') {
         List posts = await Provider.of<FetchPosts>(context, listen: false)
             .getPosts(this.widget.queryString);
         setState(() {
@@ -106,7 +108,8 @@ class _ShowPostsState extends State<ShowPosts> {
     int _ratingAPI = _rating.toInt();
     await Provider.of<AddRatings>(context, listen: false)
         .addRatings(_ratingAPI, postid);
-    if (this.widget.whichScreen == 'nickname') {
+    if (this.widget.whichScreen == 'nickname' ||
+        this.widget.whichScreen == 'homescreen') {
       List posts = await Provider.of<FetchPosts>(context, listen: false)
           .getPosts(this.widget.queryString);
       setState(() {
@@ -156,7 +159,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                             child: Image.memory(
                                               snapshot.data,
                                               fit: BoxFit.cover,
-                                              // height: 300,
+                                              height: 400,
                                               width: double.infinity,
                                             ),
                                           );
@@ -361,13 +364,21 @@ class _ShowPostsState extends State<ShowPosts> {
                   ),
                 )
               : Center(
-                  child: Text(
-                  "Sorry, This User has no Posts",
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ));
+                  child: this.widget.whichScreen == 'homescreen'
+                      ? Text(
+                          "Looks like, you have no posts, Let's add your posts",
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : Text(
+                          "Sorry, This User has no Posts",
+                          style: TextStyle(
+                            fontSize: 25.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ));
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
