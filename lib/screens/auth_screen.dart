@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:InstaPost/screens/ask_details.dart';
 import 'package:InstaPost/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
@@ -143,13 +142,7 @@ class _AuthCardState extends State<AuthCard> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _authData['email']);
         prefs.setString('password', _authData['password']);
-        String nick = prefs.getString('nickname') ?? 'nonick';
-        if (nick != 'nonick') {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => Homescreen(nick)));
-        } else {
-          Navigator.pushReplacementNamed(context, AskDetails.routeName);
-        }
+        Navigator.pushReplacementNamed(context, Homescreen.routeName);
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(

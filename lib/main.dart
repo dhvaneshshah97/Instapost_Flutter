@@ -5,7 +5,6 @@ import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/add_posts.dart';
-import 'package:InstaPost/screens/ask_details.dart';
 import './providers/image_provider.dart';
 import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
@@ -40,29 +39,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Map<String, String> userdata = {
-    'email': '',
-    'nickname': '',
-  };
-
   String email = '';
-  String nickname = '';
 
   // this method will run initially in order to check whether user is logged in
-  Future<Map> _isUserLoggedIn() async {
+  _isUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = prefs.getString('email') ?? 'notAuthenticated';
-    String nickname = prefs.getString('nickname') ?? 'nonick';
     setState(() {
-      userdata['email'] = email;
-      userdata['nickname'] = nickname;
+      this.email = email;
     });
-    return userdata;
   }
 
   @override
   void initState() {
     super.initState();
+    _isUserLoggedIn();
   }
 
   @override
@@ -96,37 +87,18 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         routes: {
+          Homescreen.routeName: (ctx) => Homescreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
           UsersByNickname.routeName: (ctx) => UsersByNickname(),
           ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
           AddPost.routeName: (ctx) => AddPost(),
-          AskDetails.routeName: (ctx) => AskDetails(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.indigo,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: FutureBuilder(
-          future: _isUserLoggedIn(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data['email'] != 'notAuthenticated') {
-                return Homescreen(snapshot.data['nickname']);
-              } else {
-                return AuthScreen();
-              }
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return Center(
-                  child: Container(
-                color: Theme.of(context).primaryColor,
-                child: CircularProgressIndicator(),
-              ));
-            }
-          },
-        ),
+        home: email != 'notAuthenticated' ? Homescreen() : AuthScreen(),
       ),
     );
   }

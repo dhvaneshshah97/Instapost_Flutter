@@ -12,29 +12,10 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  String _name = '';
-  String _email = '';
-
-  void _logOut() async {
+  _logOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('email');
     Navigator.of(context).pushReplacementNamed(AuthScreen.routeName);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<String> _getUserDetails() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String name = prefs.getString('firstname');
-    String email = prefs.getString('email');
-    setState(() {
-      _name = name;
-      _email = email;
-    });
-    return _name;
   }
 
   @override
@@ -42,29 +23,10 @@ class _AppDrawerState extends State<AppDrawer> {
     return Drawer(
       child: Column(
         children: [
-          FutureBuilder(
-              future: _getUserDetails(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return UserAccountsDrawerHeader(
-                    accountName: Text(_name),
-                    accountEmail: Text(_email),
-                    currentAccountPicture: CircleAvatar(
-                      child: Text(
-                        _name[0].toUpperCase(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      backgroundColor: Colors.red[400],
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  return Container();
-                } else {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }),
+          AppBar(
+            title: Text('Hi there..!'),
+            automaticallyImplyLeading: false,
+          ),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.home),
             title: Text('Home'),
