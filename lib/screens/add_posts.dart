@@ -1,6 +1,5 @@
 import 'dart:io' as Io;
 import 'dart:convert';
-
 import 'package:InstaPost/providers/add_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +21,7 @@ class _AddPostState extends State<AddPost> {
   final picker = ImagePicker();
   String encodedimage;
 
-  Future _getImage() async {
+  Future<void> _getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
     setState(() {
       _image = Io.File(pickedFile.path);
@@ -144,6 +143,7 @@ class _AddPostState extends State<AddPost> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
+                          print(_postData);
                           await Provider.of<AddPostProvider>(context,
                                   listen: false)
                               .addPost(_postData['text'], _postData['hashtags'],

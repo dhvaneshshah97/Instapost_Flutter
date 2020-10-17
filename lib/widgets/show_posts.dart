@@ -156,7 +156,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                             child: Image.memory(
                                               snapshot.data,
                                               fit: BoxFit.cover,
-                                              // height: 300,
+                                              // height: 400,
                                               width: double.infinity,
                                             ),
                                           );
@@ -189,8 +189,24 @@ class _ShowPostsState extends State<ShowPosts> {
                                         fontSize: 23.0,
                                       ),
                                     ),
-                                    subtitle: Text(
-                                        _posts[index]['post']['hashtags'][0]),
+                                    subtitle: Container(
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: _posts[index]['post']
+                                                ['hashtags']
+                                            .map<Widget>((comment) => Container(
+                                                  child: Text(
+                                                    '$comment ',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w300),
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      ),
+                                    ),
                                   ),
                                   Divider(),
                                   Container(
