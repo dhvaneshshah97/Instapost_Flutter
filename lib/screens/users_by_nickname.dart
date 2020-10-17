@@ -41,7 +41,7 @@ class _UsersByNicknameState extends State<UsersByNickname> {
     return Scaffold(
         drawer: AppDrawer(),
         appBar: AppBar(
-          title: Text('List of Users by nickname'),
+          title: Text('Users by nickname'),
         ),
         body: FutureBuilder<dynamic>(
           future: _getUsersByNickname(),
@@ -50,17 +50,27 @@ class _UsersByNicknameState extends State<UsersByNickname> {
               return ListView.builder(
                 itemCount: _nicknames.length,
                 itemBuilder: (context, index) => Card(
+                  // color: Colors.black,
+                  elevation: 6,
                   child: ListTile(
-                    leading: Text(
-                      '${index + 1}',
-                      style: TextStyle(),
+                    onTap: () =>
+                        _goToUserPostByNicknameScreen(_nicknames[index]),
+                    leading: CircleAvatar(
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(),
+                      ),
                     ),
-                    title: Text(_nicknames[index]),
-                    trailing: FlatButton(
-                      child: Text("See their Posts"),
-                      onPressed: () =>
-                          _goToUserPostByNicknameScreen(_nicknames[index]),
-                    ),
+                    title: Container(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                          _nicknames[index],
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black),
+                        )),
+                    trailing: Icon(Icons.navigate_next),
                   ),
                 ),
               );

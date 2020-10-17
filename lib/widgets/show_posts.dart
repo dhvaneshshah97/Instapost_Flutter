@@ -225,7 +225,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                 style: TextStyle(
                                                     fontSize: 20,
                                                     fontWeight:
-                                                        FontWeight.w300),
+                                                        FontWeight.w400),
                                               ),
                                             ],
                                           ),
@@ -241,7 +241,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight:
-                                                        FontWeight.w300),
+                                                        FontWeight.w400),
                                               ),
                                               Text(
                                                 () {
@@ -258,7 +258,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight:
-                                                        FontWeight.w300),
+                                                        FontWeight.w400),
                                               ),
                                             ],
                                           ),
@@ -316,7 +316,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                       'Comments',
                                       style: TextStyle(
                                           fontSize: 20,
-                                          fontWeight: FontWeight.w300),
+                                          fontWeight: FontWeight.w400),
                                     ),
                                   ),
                                   Container(
@@ -331,7 +331,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       fontWeight:
-                                                          FontWeight.w300),
+                                                          FontWeight.w400),
                                                 ),
                                               ))
                                           .toList(),
@@ -344,6 +344,9 @@ class _ShowPostsState extends State<ShowPosts> {
                                       controller: TextEditingController(),
                                       decoration: InputDecoration(
                                         labelText: 'Write a comment...',
+                                        labelStyle: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400),
                                         // errorText: _validate
                                         //     ? 'Please enter your comment first'
                                       ),
@@ -362,7 +365,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                         _posts[index]['post']['id']),
                                     // _addsComment(_posts[index]['post']['id']),
                                     child: Text(
-                                      'Done',
+                                      'Add',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     color: Theme.of(context).primaryColor,

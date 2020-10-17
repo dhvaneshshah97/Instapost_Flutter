@@ -1,6 +1,7 @@
 import 'dart:io' as Io;
 import 'dart:convert';
 import 'package:InstaPost/providers/add_post.dart';
+import 'package:InstaPost/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -58,6 +59,7 @@ class _AddPostState extends State<AddPost> {
           'Add your Post',
         ),
       ),
+      drawer: AppDrawer(),
       body: Form(
         key: _formKey,
         child: Container(
@@ -66,8 +68,9 @@ class _AddPostState extends State<AddPost> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Description',
-                ),
+                    labelText: 'Description',
+                    labelStyle:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.w400)),
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(144),
                 ],
@@ -84,8 +87,11 @@ class _AddPostState extends State<AddPost> {
               ),
               TextFormField(
                 decoration: InputDecoration(
-                  labelText: '#HashTags',
-                ),
+                    labelText: '#HashTags',
+                    labelStyle:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    hintText: '#hashtag1 #hashtag2...',
+                    hintStyle: TextStyle(fontSize: 14)),
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 validator: (value) {
@@ -105,7 +111,7 @@ class _AddPostState extends State<AddPost> {
                     Text(
                       'Pick an Image',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),
@@ -140,6 +146,7 @@ class _AddPostState extends State<AddPost> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RaisedButton(
+                      shape: StadiumBorder(),
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();

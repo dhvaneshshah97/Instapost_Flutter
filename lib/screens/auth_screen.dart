@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:InstaPost/screens/home_screen.dart';
+import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import 'package:flutter/material.dart';
@@ -43,18 +43,18 @@ class AuthScreen extends StatelessWidget {
                 children: <Widget>[
                   Flexible(
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
+                      margin: EdgeInsets.only(bottom: 50.0),
                       padding:
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(-10.0),
+                        ..translate(-5.0),
                       // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
+                        color: Theme.of(context).primaryColor,
                         boxShadow: [
                           BoxShadow(
-                            blurRadius: 8,
+                            blurRadius: 12,
                             color: Colors.black26,
                             offset: Offset(0, 2),
                           )
@@ -142,7 +142,7 @@ class _AuthCardState extends State<AuthCard> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('email', _authData['email']);
         prefs.setString('password', _authData['password']);
-        Navigator.pushReplacementNamed(context, Homescreen.routeName);
+        Navigator.pushReplacementNamed(context, UsersByNickname.routeName);
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
@@ -176,20 +176,10 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Signup;
-        _authData['firstname'] = '';
-        _authData['lastname'] = '';
-        _authData['nickname'] = '';
-        _authData['email'] = '';
-        _authData['password'] = '';
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
-        _authData['firstname'] = '';
-        _authData['lastname'] = '';
-        _authData['nickname'] = '';
-        _authData['email'] = '';
-        _authData['password'] = '';
       });
     }
   }

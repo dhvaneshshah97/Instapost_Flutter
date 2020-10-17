@@ -46,18 +46,28 @@ class _ListOfHashtagsState extends State<ListOfHashtags> {
                 itemCount: _hashtags.length,
                 itemBuilder: (context, index) => Card(
                   child: ListTile(
-                    leading: Text(
-                      '${index + 1}',
-                      style: TextStyle(),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HashtagRelatedPosts(_hashtags[index]))),
+                    leading: CircleAvatar(
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(),
+                      ),
                     ),
-                    title: Text(_hashtags[index]),
-                    trailing: FlatButton(
-                        child: Text("See related Posts"),
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    HashtagRelatedPosts(_hashtags[index])))),
+                    title: Container(
+                      padding: EdgeInsets.only(left: 15.0),
+                      child: Text(
+                        _hashtags[index],
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black),
+                      ),
+                    ),
+                    trailing: Icon(Icons.navigate_next),
                   ),
                 ),
               );

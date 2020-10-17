@@ -1,5 +1,5 @@
+import 'package:InstaPost/screens/add_posts.dart';
 import 'package:InstaPost/screens/auth_screen.dart';
-import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
@@ -24,20 +24,30 @@ class _AppDrawerState extends State<AppDrawer> {
       child: Column(
         children: [
           AppBar(
-            title: Text('Hi there..!'),
+            title: Text('Welcome back!'),
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            leading: FaIcon(FontAwesomeIcons.home),
-            title: Text('Home'),
+            leading: FaIcon(FontAwesomeIcons.plus),
+            title: Text(
+              'Add Post',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(Homescreen.routeName);
+              Navigator.pushReplacementNamed(context, AddPost.routeName);
             },
           ),
           Divider(),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.users),
-            title: Text('Find Users by Nicknames'),
+            title: Text(
+              'Find Users by Nicknames',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UsersByNickname.routeName);
@@ -46,7 +56,12 @@ class _AppDrawerState extends State<AppDrawer> {
           Divider(),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.hashtag),
-            title: Text('All Hashtags'),
+            title: Text(
+              'All Hashtags',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(ListOfHashtags.routeName);
@@ -55,7 +70,12 @@ class _AppDrawerState extends State<AppDrawer> {
           Divider(),
           ListTile(
             leading: FaIcon(FontAwesomeIcons.arrowAltCircleLeft),
-            title: Text('Log Out'),
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
             onTap: _logOut,
           ),
         ],

@@ -6,7 +6,6 @@ import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/add_posts.dart';
 import './providers/image_provider.dart';
-import 'package:InstaPost/screens/home_screen.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +52,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    print('sadddddddddfgggggggggg');
+    print(email);
     _isUserLoggedIn();
   }
 
@@ -87,7 +88,6 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         routes: {
-          Homescreen.routeName: (ctx) => Homescreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
           UsersByNickname.routeName: (ctx) => UsersByNickname(),
           ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
@@ -98,7 +98,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.indigo,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: email != 'notAuthenticated' ? Homescreen() : AuthScreen(),
+        home: email != 'notAuthenticated' ? UsersByNickname() : AuthScreen(),
       ),
     );
   }
