@@ -5,6 +5,7 @@ import 'package:InstaPost/providers/fetch_post.dart';
 import 'package:InstaPost/providers/get_all_hashtags.dart';
 import 'package:InstaPost/providers/users_by_nickname.dart';
 import 'package:InstaPost/screens/add_posts.dart';
+import 'package:InstaPost/screens/splash_screen.dart';
 import './providers/image_provider.dart';
 import 'package:InstaPost/screens/list_of_hashtags.dart';
 import 'package:InstaPost/screens/users_by_nickname.dart';
@@ -38,21 +39,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _email = '';
-
-  // this method will run initially in order to check whether user is logged in
-  _isUserLoggedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = prefs.getString('email') ?? 'notAuthenticated';
-    setState(() {
-      this._email = email;
-    });
-  }
+  String _email;
 
   @override
   void initState() {
     super.initState();
     _isUserLoggedIn();
+  }
+
+  // this method will run initially in order to check whether user is logged in
+  Future<String> _isUserLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = prefs.getString('email') ?? 'notAuthenticated';
+    setState(() {
+      _email = email;
+    });
+    return email;
   }
 
   @override
@@ -85,19 +87,37 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-        routes: {
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-          UsersByNickname.routeName: (ctx) => UsersByNickname(),
-          ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
-          AddPost.routeName: (ctx) => AddPost(),
-        },
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: _email != 'notAuthenticated' ? UsersByNickname() : AuthScreen(),
-      ),
+          routes: {
+            AuthScreen.routeName: (ctx) => AuthScreen(),
+            UsersByNickname.routeName: (ctx) => UsersByNickname(),
+            ListOfHashtags.routeName: (ctx) => ListOfHashtags(),
+            AddPost.routeName: (ctx) => AddPost(),
+          },
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primarySwatch: Colors.indigo,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: FutureBuilder(
+            future: _isUserLoggedIn(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                if (_email == 'notAuthenticated') {
+                  return AuthScreen();
+                } else {
+                  return UsersByNickname();
+                }
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error'),
+                );
+              } else {
+                return Splashscreen();
+              }
+            },
+          )),
     );
   }
 }
+
+// _email == 'notAuthenticated' ? AuthScreen() : UsersByNickname(),

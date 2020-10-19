@@ -32,7 +32,6 @@ class _AddPostState extends State<AddPost> {
     if (_image != null) {
       final bytes = Io.File(pickedFile.path).readAsBytesSync();
       encodedimage = base64Encode(bytes);
-      print(encodedimage);
     }
   }
 
@@ -40,7 +39,6 @@ class _AddPostState extends State<AddPost> {
     try {
       if (_formKey.currentState.validate()) {
         _formKey.currentState.save();
-        print(_postData);
         await Provider.of<AddPostProvider>(context, listen: false)
             .addPost(_postData['text'], _postData['hashtags'], encodedimage);
         bool _goBack = true;

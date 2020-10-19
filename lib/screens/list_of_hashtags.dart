@@ -3,6 +3,7 @@ import 'package:InstaPost/screens/hashtags_related_posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/app_drawer.dart';
+import 'package:async/async.dart';
 
 class ListOfHashtags extends StatefulWidget {
   static const routeName = '/listofhashtags';
@@ -13,6 +14,7 @@ class ListOfHashtags extends StatefulWidget {
 
 class _ListOfHashtagsState extends State<ListOfHashtags> {
   List _hashtags = [];
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   @override
   void initState() {
@@ -22,13 +24,15 @@ class _ListOfHashtagsState extends State<ListOfHashtags> {
 
   // This method will fetch all hashtags from provider and store in _hashtags list
   Future<void> _getAllHashtags() async {
-    List hashtags =
-        await Provider.of<GetAllHashtagsProvider>(context, listen: false)
-            .getAllHashtags();
-    setState(() {
-      _hashtags = hashtags;
+    return this._memoizer.runOnce(() async {
+      List hashtags =
+          await Provider.of<GetAllHashtagsProvider>(context, listen: false)
+              .getAllHashtags();
+      setState(() {
+        _hashtags = hashtags;
+      });
+      return _hashtags;
     });
-    return _hashtags;
   }
 
   @override

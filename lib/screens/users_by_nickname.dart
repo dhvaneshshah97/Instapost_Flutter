@@ -3,6 +3,7 @@ import 'package:InstaPost/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/users_by_nickname.dart';
+import 'package:async/async.dart';
 
 class UsersByNickname extends StatefulWidget {
   static const routeName = '/usersbynickname';
@@ -13,6 +14,7 @@ class UsersByNickname extends StatefulWidget {
 
 class _UsersByNicknameState extends State<UsersByNickname> {
   List _nicknames = [];
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   @override
   void initState() {
@@ -22,13 +24,15 @@ class _UsersByNicknameState extends State<UsersByNickname> {
 
   // This method will fetch all nicknames from provider and store in _nicknames list
   Future<void> _getUsersByNickname() async {
-    List nicknames =
-        await Provider.of<UsersByNicknameProvider>(context, listen: false)
-            .getAllUsers();
-    setState(() {
-      _nicknames = nicknames;
+    return this._memoizer.runOnce(() async {
+      List nicknames =
+          await Provider.of<UsersByNicknameProvider>(context, listen: false)
+              .getAllUsers();
+      setState(() {
+        _nicknames = nicknames;
+      });
+      return nicknames;
     });
-    return nicknames;
   }
 
   _goToUserPostByNicknameScreen(nickname) async {
