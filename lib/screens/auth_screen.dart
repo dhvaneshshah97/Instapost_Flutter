@@ -227,6 +227,7 @@ class _AuthCardState extends State<AuthCard> {
                       if (value.isEmpty) {
                         return 'Please enter your Firstname!';
                       }
+                      return null;
                     },
                   ),
                 if (_authMode == AuthMode.Signup)
@@ -239,6 +240,7 @@ class _AuthCardState extends State<AuthCard> {
                       if (value.isEmpty) {
                         return 'Please enter your Lastname!';
                       }
+                      return null;
                     },
                   ),
                 if (_authMode == AuthMode.Signup)
@@ -251,6 +253,7 @@ class _AuthCardState extends State<AuthCard> {
                       if (value.isEmpty) {
                         return 'Please enter your Nickname!';
                       }
+                      return null;
                     },
                   ),
                 TextFormField(
@@ -262,6 +265,7 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
+                    return null;
                   },
                 ),
                 TextFormField(
@@ -270,9 +274,10 @@ class _AuthCardState extends State<AuthCard> {
                   textInputAction: TextInputAction.done,
                   controller: _passwordController,
                   validator: (value) {
-                    if (value.isEmpty || value.length < 5) {
+                    if (value.isEmpty || value.length < 3) {
                       return 'Password is too short!';
                     }
+                    return null;
                   },
                 ),
                 if (_authMode == AuthMode.Signup)
@@ -285,6 +290,7 @@ class _AuthCardState extends State<AuthCard> {
                             if (value != _passwordController.text) {
                               return 'Passwords do not match!';
                             }
+                            return null;
                           }
                         : null,
                   ),

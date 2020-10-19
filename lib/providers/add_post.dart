@@ -25,8 +25,6 @@ class AddPostProvider with ChangeNotifier {
             "text": description,
             "hashtags": listofhashtags,
           }));
-
-      print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body);
       if (responseData['result'] == 'fail') {
         throw HttpException(responseData['errors']);
@@ -37,7 +35,7 @@ class AddPostProvider with ChangeNotifier {
         const url_image =
             "https://bismarck.sdsu.edu/api/instapost-upload/image";
 
-        final responseimage = await http.post(url_image,
+        await http.post(url_image,
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -47,7 +45,6 @@ class AddPostProvider with ChangeNotifier {
               "image": encodedimage,
               "post-id": responseData['id'],
             }));
-        print(jsonDecode(responseimage.body));
       }
     } catch (error) {
       throw error;

@@ -19,7 +19,6 @@ class FetchPosts with ChangeNotifier {
         },
       );
       final responseData = jsonDecode(response.body);
-      // print(responseData);
       if (responseData['ids'].length > 0) {
         for (int i = 0; i < responseData['ids'].length; i++) {
           var id = responseData['ids'][i];
@@ -34,8 +33,6 @@ class FetchPosts with ChangeNotifier {
           final responseDatat1 = jsonDecode(response1.body);
           this.posts.add(responseDatat1);
         }
-        // print(this.posts[0]['post']['text']);
-        // print(this.posts);
         return this.posts;
       }
       return this.posts;

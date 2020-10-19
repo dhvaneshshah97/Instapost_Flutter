@@ -11,7 +11,7 @@ class AddComments with ChangeNotifier {
     String email = prefs.getString('email');
     String password = prefs.getString('password');
     try {
-      final response = await http.post(url,
+      await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -21,12 +21,6 @@ class AddComments with ChangeNotifier {
             "comment": comment,
             "post-id": postid,
           }));
-
-      print(jsonDecode(response.body));
-      // final responseData = jsonDecode(response.body);
-      // if (responseData['result'] == 'fail') {
-      //   throw HttpException(responseData['errors']);
-      // }
     } catch (error) {
       throw error;
     }

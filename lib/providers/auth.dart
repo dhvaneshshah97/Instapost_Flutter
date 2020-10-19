@@ -21,7 +21,6 @@ class Auth with ChangeNotifier {
             "password": password,
           }));
 
-      print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body);
       if (responseData['result'] == 'fail') {
         throw HttpException(responseData['errors']);
@@ -41,7 +40,6 @@ class Auth with ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-      print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body);
       if (responseData['result'] == false) {
         throw HttpException('Email and Password do not match!');

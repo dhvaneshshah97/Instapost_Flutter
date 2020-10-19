@@ -27,7 +27,6 @@ class _ShowPostsState extends State<ShowPosts> {
   void initState() {
     super.initState();
     _getPosts();
-    // print(_posts);
   }
 
   void _showErrorDialog(String message) {
@@ -56,7 +55,6 @@ class _ShowPostsState extends State<ShowPosts> {
           setState(() {
             _posts = posts;
           });
-          print(_posts);
           return _posts;
         } else if (this.widget.whichScreen == 'hashtag') {
           List posts =
@@ -65,7 +63,6 @@ class _ShowPostsState extends State<ShowPosts> {
           setState(() {
             _posts = posts;
           });
-          // print(_posts);
           return _posts;
         }
       } catch (error) {
@@ -98,9 +95,9 @@ class _ShowPostsState extends State<ShowPosts> {
   }
 
   Future<void> _addsRating(int postid) async {
-    int _ratingAPI = _rating.toInt();
+    int _ratingForAPI = _rating.toInt();
     await Provider.of<AddRatings>(context, listen: false)
-        .addRatings(_ratingAPI, postid);
+        .addRatings(_ratingForAPI, postid);
     if (this.widget.whichScreen == 'nickname') {
       List posts = await Provider.of<FetchPosts>(context, listen: false)
           .getPosts(this.widget.queryString);
@@ -232,7 +229,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                                         ['ratings-average'] = 0;
                                                     return 'Average rating: ${_posts[index]['post']['ratings-average']}';
                                                   } else {
-                                                    return 'Average rating: ${_posts[index]['post']['ratings-average']}';
+                                                    return 'Average rating: ${_posts[index]['post']['ratings-average'].toStringAsFixed(1)}';
                                                   }
                                                 }(),
                                                 style: TextStyle(
@@ -248,7 +245,7 @@ class _ShowPostsState extends State<ShowPosts> {
                                             children: [
                                               RB.RatingBar(
                                                 size: 23,
-                                                initialRating: _rating,
+                                                initialRating: 0,
                                                 emptyIcon: Icons.star_border,
                                                 maxRating: 5,
                                                 filledIcon: Icons.star,

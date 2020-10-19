@@ -129,6 +129,7 @@ class _AddPostState extends State<AddPost> {
                   if (value.isEmpty) {
                     return 'Please give atleast one Hashtag to your Post';
                   }
+                  return null;
                 },
                 onSaved: (value) {
                   _postData['hashtags'] = value;
