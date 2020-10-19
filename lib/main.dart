@@ -38,22 +38,20 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String email = '';
+  String _email = '';
 
   // this method will run initially in order to check whether user is logged in
   _isUserLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = prefs.getString('email') ?? 'notAuthenticated';
     setState(() {
-      this.email = email;
+      this._email = email;
     });
   }
 
   @override
   void initState() {
     super.initState();
-    print('sadddddddddfgggggggggg');
-    print(email);
     _isUserLoggedIn();
   }
 
@@ -98,7 +96,7 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.indigo,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: email != 'notAuthenticated' ? UsersByNickname() : AuthScreen(),
+        home: _email != 'notAuthenticated' ? UsersByNickname() : AuthScreen(),
       ),
     );
   }

@@ -54,7 +54,6 @@ class _ListOfHashtagsState extends State<ListOfHashtags> {
                     leading: CircleAvatar(
                       child: Text(
                         '${index + 1}',
-                        style: TextStyle(),
                       ),
                     ),
                     title: Container(
@@ -62,9 +61,9 @@ class _ListOfHashtagsState extends State<ListOfHashtags> {
                       child: Text(
                         _hashtags[index],
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     trailing: Icon(Icons.navigate_next),
@@ -72,7 +71,12 @@ class _ListOfHashtagsState extends State<ListOfHashtags> {
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(
+                child: Text(
+                  'Could not fetch hashtags! Try again later',
+                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
+                ),
+              );
             } else {
               return Center(
                 child: CircularProgressIndicator(),

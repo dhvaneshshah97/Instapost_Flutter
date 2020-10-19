@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:InstaPost/providers/add_comments.dart';
 import 'package:InstaPost/providers/add_ratings.dart';
 import 'package:InstaPost/providers/fetch_post.dart';
@@ -8,7 +6,6 @@ import 'package:InstaPost/providers/image_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:async/async.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart' as FRB;
 import 'package:rating_bar/rating_bar.dart' as RB;
 
 class ShowPosts extends StatefulWidget {
@@ -22,10 +19,8 @@ class ShowPosts extends StatefulWidget {
 
 class _ShowPostsState extends State<ShowPosts> {
   List _posts = [];
-  // String _comment = '';
   final AsyncMemoizer _memoizer = AsyncMemoizer();
   Map<int, String> _inputs = {};
-  // bool _validate = false;
   double _rating = 0;
 
   @override
@@ -150,8 +145,6 @@ class _ShowPostsState extends State<ShowPosts> {
                                       builder: (BuildContext context,
                                           AsyncSnapshot snapshot) {
                                         if (snapshot.hasData) {
-                                          print('hoya');
-                                          print(snapshot.data);
                                           return Card(
                                             child: Image.memory(
                                               snapshot.data,
@@ -178,36 +171,23 @@ class _ShowPostsState extends State<ShowPosts> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   ListTile(
-                                    contentPadding:
-                                        EdgeInsets.only(left: 0, right: 0),
-                                    leading: CircleAvatar(
-                                      child: Text((index + 1).toString()),
-                                    ),
-                                    title: Text(
-                                      _posts[index]['post']['text'],
-                                      style: TextStyle(
-                                        fontSize: 23.0,
+                                      contentPadding:
+                                          EdgeInsets.only(left: 0, right: 0),
+                                      leading: CircleAvatar(
+                                        child: Text((index + 1).toString()),
                                       ),
-                                    ),
-                                    subtitle: Container(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: _posts[index]['post']
-                                                ['hashtags']
-                                            .map<Widget>((comment) => Container(
-                                                  child: Text(
-                                                    '$comment ',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w300),
-                                                  ),
-                                                ))
-                                            .toList(),
+                                      title: Text(
+                                        _posts[index]['post']['text'],
+                                        style: TextStyle(
+                                          fontSize: 23.0,
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                      subtitle: () {
+                                        return Text(
+                                          _posts[index]['post']['hashtags']
+                                              .join(' '),
+                                        );
+                                      }()),
                                   Divider(),
                                   Container(
                                     padding:

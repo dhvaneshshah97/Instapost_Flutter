@@ -50,7 +50,6 @@ class _UsersByNicknameState extends State<UsersByNickname> {
               return ListView.builder(
                 itemCount: _nicknames.length,
                 itemBuilder: (context, index) => Card(
-                  // color: Colors.black,
                   elevation: 6,
                   child: ListTile(
                     onTap: () =>
@@ -58,7 +57,6 @@ class _UsersByNicknameState extends State<UsersByNickname> {
                     leading: CircleAvatar(
                       child: Text(
                         '${index + 1}',
-                        style: TextStyle(),
                       ),
                     ),
                     title: Container(
@@ -66,16 +64,21 @@ class _UsersByNicknameState extends State<UsersByNickname> {
                         child: Text(
                           _nicknames[index],
                           style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          ),
                         )),
                     trailing: Icon(Icons.navigate_next),
                   ),
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
+              return Center(
+                child: Text(
+                  'Could not fetch nicknames! Try again later',
+                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
+                ),
+              );
             } else {
               return Center(
                 child: CircularProgressIndicator(),

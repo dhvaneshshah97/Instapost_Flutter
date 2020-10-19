@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../models/http_exception.dart';
 
 class AddComments with ChangeNotifier {
   Future<void> addCommets(String comment, int postid) async {

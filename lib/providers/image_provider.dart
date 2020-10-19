@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

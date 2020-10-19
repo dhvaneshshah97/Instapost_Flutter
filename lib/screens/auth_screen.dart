@@ -14,10 +14,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    // final transformConfig = Matrix4.rotationZ(-8 * pi / 180);
-    // transformConfig.translate(-10.0);
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           Container(
@@ -48,7 +45,6 @@ class AuthScreen extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 94.0),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
                         ..translate(-5.0),
-                      // ..translate(-10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Theme.of(context).primaryColor,
@@ -98,13 +94,11 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   AuthMode _authMode = AuthMode.Login;
-  Map<String, String> _authData = {
-    'firstname': '',
-    'lastname': '',
-    'nickname': '',
-    'email': '',
-    'password': '',
-  };
+
+  final _firstnameController = TextEditingController();
+  final _lastnameController = TextEditingController();
+  final _nicknameController = TextEditingController();
+  final _emailController = TextEditingController();
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
@@ -129,7 +123,6 @@ class _AuthCardState extends State<AuthCard> {
       // Invalid!
       return;
     }
-    _formKey.currentState.save();
     setState(() {
       _isLoading = true;
     });
@@ -137,20 +130,34 @@ class _AuthCardState extends State<AuthCard> {
       if (_authMode == AuthMode.Login) {
         // Log user in
         await Provider.of<Auth>(context, listen: false)
-            .login(_authData['email'], _authData['password']);
+            .login(_emailController.text, _passwordController.text);
+
         // storing user email for later authentication
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('email', _authData['email']);
-        prefs.setString('password', _authData['password']);
+        prefs.setString('email', _emailController.text);
+        prefs.setString('password', _passwordController.text);
         Navigator.pushReplacementNamed(context, UsersByNickname.routeName);
       } else {
         // Sign user up
         await Provider.of<Auth>(context, listen: false).signup(
-            _authData['firstname'],
-            _authData['lastname'],
-            _authData['nickname'],
-            _authData['email'],
-            _authData['password']);
+            _firstnameController.text,
+            _lastnameController.text,
+            _nicknameController.text,
+            _emailController.text,
+            _passwordController.text);
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text(
+            'Sign up successful! You can log in now',
+            style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1),
+          ),
+          backgroundColor: Theme.of(context).primaryColor,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ));
       }
     } on HttpException catch (error) {
       var errorMessage = 'Authentication failed';
@@ -176,10 +183,17 @@ class _AuthCardState extends State<AuthCard> {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _authMode = AuthMode.Signup;
+        _emailController.text = '';
+        _passwordController.text = '';
       });
     } else {
       setState(() {
         _authMode = AuthMode.Login;
+        _firstnameController.text = '';
+        _lastnameController.text = '';
+        _nicknameController.text = '';
+        _emailController.text = '';
+        _passwordController.text = '';
       });
     }
   }
@@ -205,6 +219,7 @@ class _AuthCardState extends State<AuthCard> {
               children: <Widget>[
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
+                    controller: _firstnameController,
                     decoration: InputDecoration(labelText: 'Firstname'),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -213,12 +228,10 @@ class _AuthCardState extends State<AuthCard> {
                         return 'Please enter your Firstname!';
                       }
                     },
-                    onSaved: (value) {
-                      _authData['firstname'] = value;
-                    },
                   ),
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
+                    controller: _lastnameController,
                     decoration: InputDecoration(labelText: 'Lastname'),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -227,12 +240,10 @@ class _AuthCardState extends State<AuthCard> {
                         return 'Please enter your Lastname!';
                       }
                     },
-                    onSaved: (value) {
-                      _authData['lastname'] = value;
-                    },
                   ),
                 if (_authMode == AuthMode.Signup)
                   TextFormField(
+                    controller: _nicknameController,
                     decoration: InputDecoration(labelText: 'Nickname'),
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
@@ -241,11 +252,9 @@ class _AuthCardState extends State<AuthCard> {
                         return 'Please enter your Nickname!';
                       }
                     },
-                    onSaved: (value) {
-                      _authData['nickname'] = value;
-                    },
                   ),
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
@@ -253,9 +262,6 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
-                  },
-                  onSaved: (value) {
-                    _authData['email'] = value;
                   },
                 ),
                 TextFormField(
@@ -267,9 +273,6 @@ class _AuthCardState extends State<AuthCard> {
                     if (value.isEmpty || value.length < 5) {
                       return 'Password is too short!';
                     }
-                  },
-                  onSaved: (value) {
-                    _authData['password'] = value;
                   },
                 ),
                 if (_authMode == AuthMode.Signup)

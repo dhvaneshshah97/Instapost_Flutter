@@ -1,12 +1,14 @@
 import 'dart:io' as Io;
 import 'dart:convert';
 import 'package:InstaPost/providers/add_post.dart';
+import 'package:InstaPost/screens/users_by_nickname.dart';
 import 'package:InstaPost/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import '../models/http_exception.dart';
 
 class AddPost extends StatefulWidget {
   static const routeName = '/addpost';
@@ -34,17 +36,45 @@ class _AddPostState extends State<AddPost> {
     }
   }
 
-  void _statusDialog() {
+  void _submitPost() async {
+    try {
+      if (_formKey.currentState.validate()) {
+        _formKey.currentState.save();
+        print(_postData);
+        await Provider.of<AddPostProvider>(context, listen: false)
+            .addPost(_postData['text'], _postData['hashtags'], encodedimage);
+        bool _goBack = true;
+        _statusDialog('Post Submitted Succefully', _goBack);
+      }
+    } on HttpException catch (error) {
+      String errorMessage = "Could not submit post! Try again later";
+      if (error.toString().contains('Some strings are not valid hashtags')) {
+        errorMessage = "Enter valid hashtags, append '#' to each hashtag";
+        bool _goBack = false;
+        _statusDialog(errorMessage, _goBack);
+      } else {
+        bool _goBack = true;
+        _statusDialog(errorMessage, _goBack);
+      }
+    } catch (error) {
+      bool _goBack = true;
+      _statusDialog('Could not submit post! Try again later', _goBack);
+    }
+  }
+
+  void _statusDialog(String message, bool goBack) {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
               title: Text('Status'),
-              content: Text('Post Submitted Succefully'),
+              content: Text(message),
               actions: [
                 FlatButton(
                     onPressed: () {
                       Navigator.of(ctx).pop();
-                      Navigator.of(context).pop();
+                      if (goBack)
+                        Navigator.pushReplacementNamed(
+                            context, UsersByNickname.routeName);
                     },
                     child: Text('Okay'))
               ],
@@ -80,6 +110,7 @@ class _AddPostState extends State<AddPost> {
                   if (value.isEmpty) {
                     return 'Please give some Post Description';
                   }
+                  return null;
                 },
                 onSaved: (value) {
                   _postData['text'] = value;
@@ -147,17 +178,7 @@ class _AddPostState extends State<AddPost> {
                   children: [
                     RaisedButton(
                       shape: StadiumBorder(),
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          _formKey.currentState.save();
-                          print(_postData);
-                          await Provider.of<AddPostProvider>(context,
-                                  listen: false)
-                              .addPost(_postData['text'], _postData['hashtags'],
-                                  encodedimage);
-                          _statusDialog();
-                        }
-                      },
+                      onPressed: _submitPost,
                       color: Theme.of(context).primaryColor,
                       child: Text(
                         'Submit',

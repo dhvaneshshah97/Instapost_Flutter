@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import '../models/http_exception.dart';
 
 class AddPostProvider with ChangeNotifier {
   Future<void> addPost(
@@ -27,7 +28,11 @@ class AddPostProvider with ChangeNotifier {
 
       print(jsonDecode(response.body));
       final responseData = jsonDecode(response.body);
+      if (responseData['result'] == 'fail') {
+        throw HttpException(responseData['errors']);
+      }
 
+      // if there is no image, then no point of sending it to server
       if (encodedimage != null) {
         const url_image =
             "https://bismarck.sdsu.edu/api/instapost-upload/image";
